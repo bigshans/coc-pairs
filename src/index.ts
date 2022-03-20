@@ -15,6 +15,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const disableLanguages = config.get<string[]>('disableLanguages')
   const characters = config.get<string[]>('enableCharacters')
   const alwaysPairCharacters = config.get<string[]>('alwaysPairCharacters', [])
+  const dontMove = config.get<boolean>('dontMoveOutSide')
   let enableBackspace = config.get<boolean>('enableBackspace')
   if (enableBackspace) {
     let map = (await workspace.nvim.call('maparg', ['<bs>', 'i'])) as string
@@ -142,8 +143,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
       )
     }
     let matched = pairs.get(character)
-    if (matched != character) {
-      subscriptions.push(workspace.registerExprKeymap('i', matched, closePair.bind(null, matched), false))
+    if (!dontMove) {
+      if (matched != character) {
+        subscriptions.push(workspace.registerExprKeymap('i', matched, closePair.bind(null, matched), false))
+      }
     }
   }
   if (enableBackspace) {
