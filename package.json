@@ -65,9 +65,12 @@
           "default": true
         },
         "pairs.dontMoveOutSide": {
-            "type": "boolean",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "Don't move the cursor when input the pair.",
-            "default": false
+            "default": []
         }
       }
     }
